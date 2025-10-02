@@ -1,0 +1,3 @@
+public enum Genero {
+    ACCION, DRAMA, COMEDIA, SCIFI, FANTASIA, AVENTURAS
+}
