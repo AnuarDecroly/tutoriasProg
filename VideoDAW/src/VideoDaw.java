@@ -1,5 +1,4 @@
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,6 +42,43 @@ public class VideoDaw {
     Además de los constructores y propiedades necesarios, deberá tener al menos
     Un método para devolver una película devolverPelicula(Pelicula p, cliente c):  deberá comprobar que no haya excedido el tiempo máximo de 48 horas, en caso de excederlo mostrara un mensaje de advertencia.
     */
+
+    public boolean devolverPelicula(Pelicula p, Cliente c){
+        boolean respuesta = false;
+
+        //Comprobar si la pelicula esta alquilada y exista en nuestro videoDaw
+        //Cambiar el estado de la pelicula y buscar el cliente para
+        // Cambiar en su lista el estado de la pelicula
+        if(this.peliculasRegistradas.contains(p)){
+            int index = this.peliculasRegistradas.indexOf(p);
+            if(this.peliculasRegistradas.get(index).isAlquilada()){
+                this.peliculasRegistradas.get(index).setIsAlquilada(false);
+                p.setIsAlquilada(false);
+                c.devolverPelicula(p);
+
+                //Comprobar que no exceda de las 48H
+                LocalDateTime now = LocalDateTime.now();
+                ZoneId zone = ZoneId.of("Europe/Berlin"); //ZoneId.systemDefault();
+                ZoneOffset zoneOffSet = zone.getRules().getOffset(now);
+
+
+                long epocFechaAlquiler = p.getFechaAlquiler().toEpochSecond(zoneOffSet);
+                long epochFechaActual = now.toEpochSecond(zoneOffSet);
+                if(epochFechaActual - epocFechaAlquiler > 172800){
+                    System.out.println("El tiempo de alquiler se ha excecido por lo que se cobrara un recargo");
+                }
+
+                //Solo por ver como pasar de long a localdatetime
+
+               LocalDateTime nuevaFecha = LocalDateTime.ofInstant(Instant.ofEpochSecond(epocFechaAlquiler),zone);
+
+                respuesta = true;
+
+            }
+        }
+        return respuesta;
+    }
+
 
 
     public boolean registraCliente(Cliente c){

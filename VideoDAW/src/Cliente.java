@@ -85,6 +85,10 @@ public class Cliente {
     }
 
     public void devolverPelicula(Pelicula p){
-        p.setIsAlquilada(false);
+        if(this.peliculasAlquiladas.contains(p)){
+            p.setIsAlquilada(false);
+            int index = this.peliculasAlquiladas.indexOf(p);
+            this.peliculasAlquiladas.get(index).setIsAlquilada(false);
+        }
     }
 }
